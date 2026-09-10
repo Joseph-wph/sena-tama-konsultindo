@@ -1,70 +1,86 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { useState } from 'react';
+import { Menu, X } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 
-export default function Navbar() {
+interface NavbarProps {
+  withBackground?: boolean;
+}
+
+export default function Navbar({ withBackground = false }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const phoneNumber = "6281807597477";
+  const phoneNumber = '6281807597477';
 
   const message =
-    "Hello Sena Tama Konsultindo, I would like to ask about your services.";
+    'Hello Sena Tama Konsultindo, I would like to ask about your services.';
 
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-    message,
+    message
   )}`;
 
+  const closeMenu = () => {
+    setIsOpen(false);
+  };
+
   return (
-    <header className="absolute top-0 left-0 z-50 w-full">
-      <div className="max-w-7xl mx-auto px-5 lg:px-10">
-        <div className="flex items-center justify-between h-24">
+    <header
+      className={`absolute top-0 left-0 z-50 w-full transition-colors ${
+        withBackground ? 'bg-white/50 backdrop-blur-sm shadow-sm' : ''
+      }`}
+    >
+      <div className='mx-auto max-w-7xl px-5 lg:px-10'>
+        <div className='flex h-24 items-center justify-between'>
           {/* Logo */}
-          <a href="#home" className="shrink-0">
-            <img
-              src="/assets/logo/logoStk.png"
-              alt="Sena Tama Konsultindo"
-              className="w-44 xl:w-56"
+          <Link href='/#home' className='shrink-0'>
+            <Image
+              src='/assets/logo/logoStk.png'
+              alt='Sena Tama Konsultindo'
+              width={224}
+              height={80}
+              className='h-auto w-44 xl:w-56'
             />
-          </a>
+          </Link>
 
           {/* Desktop Menu */}
-          <nav className="hidden lg:block">
-            <ul className="flex items-center gap-8 xl:gap-12 text-primary font-semibold">
+          <nav className='hidden lg:block'>
+            <ul className='flex items-center gap-8 font-semibold text-primary xl:gap-12'>
               <li>
-                <a
-                  href="#home"
-                  className="hover:text-secondary transition-colors"
+                <Link
+                  href='/#home'
+                  className='transition-colors hover:text-secondary'
                 >
                   Home
-                </a>
+                </Link>
               </li>
 
               <li>
-                <a
-                  href="#about"
-                  className="hover:text-secondary transition-colors"
+                <Link
+                  href='/#about'
+                  className='transition-colors hover:text-secondary'
                 >
                   About
-                </a>
+                </Link>
               </li>
 
               <li>
-                <a
-                  href="#services"
-                  className="hover:text-secondary transition-colors"
+                <Link
+                  href='/#services'
+                  className='transition-colors hover:text-secondary'
                 >
                   Services
-                </a>
+                </Link>
               </li>
 
               <li>
-                <a
-                  href="#testimonial"
-                  className="hover:text-secondary transition-colors"
+                <Link
+                  href='/#testimonial'
+                  className='transition-colors hover:text-secondary'
                 >
                   Testimonial
-                </a>
+                </Link>
               </li>
             </ul>
           </nav>
@@ -72,17 +88,19 @@ export default function Navbar() {
           {/* Contact Button */}
           <a
             href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden lg:inline-flex items-center justify-center shrink-0 bg-primary hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-full transition-colors"
+            target='_blank'
+            rel='noopener noreferrer'
+            className='hidden shrink-0 items-center justify-center rounded-full bg-primary px-6 py-3 font-medium text-white transition-colors hover:bg-blue-700 lg:inline-flex'
           >
             Contact Us
           </a>
 
           {/* Mobile Button */}
           <button
+            type='button'
             onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden text-primary"
+            className='text-primary lg:hidden'
+            aria-label='Toggle menu'
           >
             {isOpen ? <X size={32} /> : <Menu size={32} />}
           </button>
@@ -91,39 +109,45 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="lg:hidden bg-white shadow-lg">
-          <div className="max-w-7xl mx-auto px-5 py-6">
-            <ul className="flex flex-col gap-5 text-primary font-semibold">
+        <div className='bg-white shadow-lg lg:hidden'>
+          <div className='mx-auto max-w-7xl px-5 py-6'>
+            <ul className='flex flex-col gap-5 font-semibold text-primary'>
               <li>
-                <a href="#home" onClick={() => setIsOpen(false)}>
+                <Link href='/#home' onClick={closeMenu} className='block'>
                   Home
-                </a>
+                </Link>
               </li>
 
               <li>
-                <a href="#about" onClick={() => setIsOpen(false)}>
+                <Link href='/#about' onClick={closeMenu} className='block'>
                   About
-                </a>
+                </Link>
               </li>
 
               <li>
-                <a href="#services" onClick={() => setIsOpen(false)}>
+                <Link href='/#services' onClick={closeMenu} className='block'>
                   Services
-                </a>
+                </Link>
               </li>
 
               <li>
-                <a href="#testimonial" onClick={() => setIsOpen(false)}>
+                <Link
+                  href='/#testimonial'
+                  onClick={closeMenu}
+                  className='block'
+                >
                   Testimonial
-                </a>
+                </Link>
               </li>
             </ul>
 
+            {/* Mobile Contact Button */}
             <a
               href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-6 flex items-center justify-center bg-primary hover:bg-blue-700 text-white py-3 rounded-full transition-colors"
+              target='_blank'
+              rel='noopener noreferrer'
+              onClick={closeMenu}
+              className='mt-6 flex items-center justify-center rounded-full bg-primary py-3 text-white transition-colors hover:bg-blue-700'
             >
               Contact Us
             </a>
